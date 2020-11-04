@@ -2,10 +2,11 @@ import Player from "./player"
 import LEVELS from "./levels/levels"
 
 export default class Objects {
-   constructor(dimensions) {
+   constructor(dimensions, ctx) {
+      this.ctx = ctx
       this.dimensions = dimensions
       this.floor = this.dimensions.height - 50;
-      this.player = new Player(dimensions, this.floor)
+      this.player = new Player(dimensions, this.floor, ctx)
       this.terrain = [];
       this.selectLevel = this.selectLevel.bind(this)
       this.move = this.move.bind(this)
@@ -20,6 +21,11 @@ export default class Objects {
 
    move(e){
       this.checkCollision(e.key)
+      // if(this.player.scrollRight && e.key === 'd'){
+      //    this.level.move(5);
+      // } else if(this.player.scrollLeft && e.key === 's'){
+      //    this.level.move(-5);
+      // }
       this.player.move(e);
    }
 
@@ -29,7 +35,7 @@ export default class Objects {
 
    checkCollision(key){
       const { terrain } = this
-      let feet = this.player.y + this.player.playerSize;
+      let feet = this.player.y + this.player.height;
 
       // for( let i = 0; i < terrain.length; i++ ) {
       //    let ter = terrain[i];
@@ -46,19 +52,20 @@ export default class Objects {
    }
    checkFloor(){
       const { terrain, player } = this;
-      let feet = player.y + player.playerSize;
-      let pLeft = player.x + player.playerSize;
+      let feet = player.y + player.height;
+      let pLeft = player.x + player.width;
       let pRight = player.x
 
       terrain.forEach( terr => {
+         let terrStart = terr.start - this.level.left
          if( terr.render && 
                feet < (terr.y + 5) && 
                feet > (terr.y - 6) && 
-               pLeft > terr.start &&
-               pRight < (terr.start + terr.width)){
+               pLeft > terrStart &&
+               pRight < (terrStart + terr.width)){
             player.fall = false;
             player.dy = 0
-            player.y = terr.y - player.playerSize
+            player.y = terr.y - player.height
             player.jump = 0
             this.walkingTerrain = terr;
          }
@@ -67,10 +74,12 @@ export default class Objects {
 
    checkClear(){
       const { walkingTerrain, player } = this;
-      let pLeft = player.x + player.playerSize;
+      let pLeft = player.x + player.width;
       let pRight = player.x;
-      if( pLeft <= walkingTerrain.start || pRight >= (walkingTerrain.start + walkingTerrain.width)){
+      let terrStart = walkingTerrain.start - this.level.left
+      if( pLeft <= terrStart || pRight >= (terrStart + walkingTerrain.width)){
          player.fall = true;
+         this.walkingTerrain = false
       }
    }
 
@@ -82,6 +91,12 @@ export default class Objects {
          this.dimensions.width,
          this.dimensions.height
       );
+      if(!this.player.scrollLeft && !this.player.scrollRight){
+         this.level.stop()
+      } else {
+         let dir = this.player.scrollRight? 5 : -5
+         this.level.move(dir)
+      }
       this.level.draw(ctx)
       if( this.player.dy > 0 ){
          this.checkFloor()

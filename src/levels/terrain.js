@@ -2,8 +2,9 @@
 
 export default class Terrain {
 
-   static platform(x, y, width, height, canvasWidth){
+   static ground(x, y, width, height, canvasWidth, platform){
       return {
+         platform: platform,
          width: width,
          start: x,
          y: y,
