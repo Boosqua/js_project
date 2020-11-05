@@ -97,14 +97,17 @@ export default class LevelOne {
       this.dx = direction;
    }
    won(player){
-      return this.left >1400;
+      if(this.left > 1000){
+         player.edgeRight = 600;
+         return true
+      };
    }
    stop(key){
       this.dx = 0
    }
    draw(ctx){
       const { left, right } = this
-      if(this.left > 0 || this.dx > 0){
+      if((this.left > 0 || this.dx > 0)){
          this.left += this.dx
          this.right += this.dx
       }

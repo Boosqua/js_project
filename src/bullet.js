@@ -1,4 +1,6 @@
-export default class bullet {
+import Player from './player'
+import EnemyBullets from "./enemy_bullets";
+export default class Bullet {
    constructor(r, x, y, dx, dy){
       this.r = r,
       this.x = x,
@@ -13,8 +15,7 @@ export default class bullet {
       const { r, x, y } = this;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2, false);
-      ctx.strokeStyle = "blue";
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = "red";
       ctx.fill();
       ctx.stroke();
       this.move()
@@ -22,6 +23,43 @@ export default class bullet {
 
    move(){
       this.x += this.dx,
-      this.y = this.dy
+      this.y += this.dy
+   }
+
+   static checkHit(bullets, sprites){
+      let all = bullets.concat(sprites);
+      for( let i = 0; i < sprites.length ; i++ ){
+         let ele1 = sprites[i];
+         for( let j = 0; j < bullets.length; j++ ){
+            let ele2 = bullets[j]
+
+            if( Bullet.checkTwo(ele1, ele2) ){
+               return true;
+            }
+         }
+      }
+   }
+   static checkTwo(ele1, ele2){
+      if (ele1 instanceof Player && ele2 instanceof EnemyBullets) {
+         return (
+            Bullet.checkY(ele2.y, ele1.y, ele2.r, ele1.height) &&
+            Bullet.checkX(ele2.x, ele1.x, ele2.r, ele1.width)
+            );
+      } else if (ele2 instanceof Player && ele1 instanceof EnemyBullets) {
+         return (
+            Bullet.checkY(ele1.y, ele2.y, ele1.r, ele2.height) &&
+            Bullet.checkX(ele1.x, ele2.x, ele1.r, ele2.width)
+         );
+      }
+   }
+   static checkY(bulletY, spriteY, r, height){
+      if(bulletY -  r > spriteY && bulletY + r < spriteY + height){
+         return true;
+      }
+   }
+   static checkX(bulletX, spriteX, r, width){
+      if(bulletX -  r > spriteX && bulletX + r < spriteX + width){
+         return true;
+      }
    }
 }

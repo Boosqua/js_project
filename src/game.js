@@ -1,5 +1,6 @@
 /** Necessary **/
-import Objects from './objects'
+import Objects from './objects';
+import bg from './images/sheet.png'
 /** Testing **/
 import Practice from './practice'
 
@@ -14,7 +15,8 @@ export default class TempGameName {
       this.gameOver = false;
       this.gameRunning = false;
       this.move = this.move.bind(this) 
-
+      this.img = new Image();
+      this.img.src = bg
       document.addEventListener('keydown', this.move)
       document.addEventListener('keyup', this.game.stop)
       this.animate();
@@ -40,6 +42,7 @@ export default class TempGameName {
       this.ctx.fillStyle = "#264653";
       this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
       if(this.gameRunning){
+         this.ctx.drawImage(this.img, 0, 0, 110, 110, 75, 0, this.dimensions.height, this.dimensions.height)
          this.game.draw(this.ctx)
       } else if(this.gameOver) {
          this.endGame();

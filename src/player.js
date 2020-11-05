@@ -18,6 +18,7 @@ export default class Player {
       this.dy = 0;
       this.move = this.move.bind(this)
       this.stop = this.stop.bind(this)
+      this.edgeRight = 500
       this.jump = 0;
       this.fall = true
       this.character = new Sprite(ctx)
@@ -59,7 +60,7 @@ export default class Player {
 
    checkScroll(){
       let scroll = false;
-      if (this.dx > 0 && this.x >= 500) {
+      if (this.dx > 0 && this.x >= this.edgeRight) {
          this.scrollRight = true;
          scroll = true;
       } else if (this.dx < 0 && this.x <= 100) {

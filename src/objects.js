@@ -1,6 +1,7 @@
 import Player from "./player"
 import LEVELS from "./levels/levels"
 import terrainUtils from "./terrain_utils"
+import Bullet from "./bullet";
 
 export default class Objects {
    constructor(dimensions, ctx) {
@@ -10,6 +11,7 @@ export default class Objects {
 
       this.player = new Player(dimensions, this.floor, ctx);
       this.terrain = [];
+      this.bullets = [];
       this.selectLevel = this.selectLevel.bind(this);
       this.move = this.move.bind(this);
       this.stop = this.stop.bind(this);
@@ -18,11 +20,10 @@ export default class Objects {
       this.currentLevel = 1;
    }
    over(){
-      if (this.player.y >= this.dimensions.height ){
+      if (this.player.y >= this.dimensions.height || Bullet.checkHit(this.bullets, [this.player])){
          this.currentLevel = 1;
          return true
-      } else if(this.level.won()){
-         console.log('breh')
+      } else if(this.level.won(this.player)){
          this.currentLevel++
          this.selectLevel()
          return false
@@ -31,6 +32,7 @@ export default class Objects {
    selectLevel() {
       this.level = LEVELS[this.currentLevel](this.dimensions);
       this.terrain = this.level.terrain
+      this.bullets = this.level.bullets
       this.player.direction = true
       this.player.y = this.level.startPos[1]
       this.player.x = this.level.startPos[0]
@@ -52,7 +54,7 @@ export default class Objects {
       } else if( this.player.dx < 0){
          this.player.blockR = false
          this.checkLeft()
-      } 
+      }
    }
 
    checkRight(){
