@@ -1,7 +1,7 @@
 import Sprite from './sprites'
 const MOVEMENTS = {
-   a: -5,
-   d: 5,
+   a: -4.5,
+   d: 4.5,
 }
 const GRAVITY = .5
 const TERMINAL = 10
@@ -11,20 +11,23 @@ export default class Player {
       this.dimensions = dimensions;
       this.height = 40
       this.width = 30
-      this.floor = floor - this.height
+      this.floor = dimensions.height
       this.x = dimensions.width / 2;
-      this.y = floor
+      this.y = floor - this.height
       this.dx = 0;
       this.dy = 0;
       this.move = this.move.bind(this)
       this.stop = this.stop.bind(this)
       this.jump = 0;
-      this.fall = false
+      this.fall = true
       this.character = new Sprite(ctx)
       this.scrollRight = false;
       this.scrollLeft = false;
       this.direction = true;
-      this.platform = true
+      this.platform = false
+      this.blockR = false;
+      this.blockL = false;
+      this.blockClear = 0
       // store lives?
    }
 
@@ -33,12 +36,7 @@ export default class Player {
       if(this.dx === 0){
          this.character.animationFrame = 0
       }
-
-      if(this.dx > 0 && this.x >= 600){
-         this.scrollRight = true;
-      } else if (this.dx < 0 && this.x <= 50){
-         this.scrollLeft = true;
-      } else if ( this.dx != 0 ){
+      if ( this.dx != 0 && !this.checkScroll() && this.checkBlock() ){
          this.x += this.dx;
          this.scrollRight = false;
          this.scrollLeft = false         
@@ -55,11 +53,35 @@ export default class Player {
       }
    }
 
+   checkScroll(){
+      let scroll = false;
+      if (this.dx > 0 && this.x >= 500) {
+         this.scrollRight = true;
+         scroll = true;
+      } else if (this.dx < 0 && this.x <= 100) {
+         this.scrollLeft = true;
+         scroll = true
+      } 
+      return scroll
+   }
+
+   checkBlock(){
+
+      if(this.dx > 0 && this.blockR ){
+         return false;
+      } else if (this.dx < 0 && this.blockL ){
+         return false
+      } else {
+         return true
+      }
+   }
    move(e){
       let key = e.key;
 
       if( key === 'a' || key === 'd' ){
-         this.dx = MOVEMENTS[key]
+
+            this.dx = MOVEMENTS[key]
+
          this.direction = key === 'd' ? true : false
       } else if( e.key === 'w' && this.jump < 2 ){
          this.dy = this.dy > 0 ? -8 : this.dy - 8
