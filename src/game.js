@@ -9,26 +9,71 @@ export default class TempGameName {
       this.dimensions = { width: canvas.width, height: canvas.height };
       this.game = new Objects(this.dimensions, this.ctx);
       this.level = 1;
-      this.game.selectLevel(2)
       this.animate = this.animate.bind(this)
+      this.noGame = true;
+      this.gameOver = false;
+      this.gameRunning = false;
+      this.move = this.move.bind(this) 
 
-      document.addEventListener('keydown', this.game.move)
+      document.addEventListener('keydown', this.move)
       document.addEventListener('keyup', this.game.stop)
       this.animate();
    }
 
+   move(e){
+
+      if(this.noGame || this.gameOver){
+         this.game.selectLevel(2)
+         this.noGame = false;
+         this.gameOver = false;
+         this.gameRunning = true;
+      } else {
+         this.game.move(e)
+      }
+   }
    animate() {
       requestAnimationFrame(this.animate);
+      if(this.gameRunning){
+         this.over();
+      }
       this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
       this.ctx.fillStyle = "#264653";
       this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
-      this.game.draw(this.ctx)
+      if(this.gameRunning){
+         this.game.draw(this.ctx)
+      } else if(this.gameOver) {
+         this.endGame();
+      } else if(this.noGame){
+         this.instructions()
+      }
       /** Testing **/
       // this.drawGrid();
       // let ctx = this.ctx
       // this.practice.forEach( circle => circle.draw(ctx) )
    }
+   over(){
+      if(this.game.over()){
+         this.gameOver = true;
+         this.gameRunning = false;
+      }
+   }
+   instructions(){
+      this.ctx.fillStyle = "#F4A261";
+      this.ctx.textAlign= "center"
+      this.ctx.font = "20px Georgia";
+      this.ctx.fillText("Press any button to begin the game", this.dimensions.width / 2, this.dimensions.height / 2);
+   }
+   endGame(){
 
+      this.ctx.fillStyle = "#F4A261";
+      this.ctx.textAlign = "center";
+      this.ctx.font = "20px Georgia";
+      this.ctx.fillText(
+        "you died lol",
+        this.dimensions.width / 2,
+        this.dimensions.height / 2
+      );
+   }
    /* Testing */
    circles(){
       let circles = [];
@@ -37,7 +82,6 @@ export default class TempGameName {
       }
       return circles
    }
-
    drawGrid(){
       let xEnd = this.dimensions.width;
       let yEnd = this.dimensions.height;

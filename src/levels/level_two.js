@@ -1,12 +1,13 @@
 import Terrain from "./terrain.js";
 import TerrainUtil from "../terrain_utils";
 import LevelUtils from './level_utils'
-
+import EnemyBullets from '../enemy_bullets'
 export default class LevelTwo extends LevelUtils {
    constructor(dimensions){
       super(dimensions);
       this.terrain = this.formTerrain();
       this.numTerrain = this.terrain.length;
+      this.bullets = this.formBullets()
       this.startPos = [125, 525];
    }
 
@@ -55,14 +56,29 @@ export default class LevelTwo extends LevelUtils {
 
       return levelObjects
    }
+   won(){
 
+   }
+   formBullets(){
+      let bullets = []
+      for(let i = 0; i < 10; i++){
+         bullets.push( new EnemyBullets (
+            10,
+            this.width + (75 * i),
+            275,
+            2,
+            0
+         ))
+      }
+      return bullets
+   }
    draw(ctx){
       const { left, right } = this
       if(this.left > 0 || this.dx > 0){
          this.left += this.dx
          this.right += this.dx
       }
-
+      this.bullets.forEach( bullet => bullet.draw(ctx))
       for(let i = 0; i < this.numTerrain; i++) {
          let ter = this.terrain[i];
          if( ter.start < right && ter.end > left ){

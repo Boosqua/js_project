@@ -9,9 +9,12 @@ export default class LevelOne {
       this.terrain = this.formTerrain();
       this.numTerrain = this.terrain.length;
       this.dx = 0
+      this.won = this.won.bind(this)
       this.move = this.move.bind(this);
       this.stop = this.stop.bind(this);
       this.startPos = [125, 535]
+      this.intSeen = false
+      this.bullets = []
    }
 
    formTerrain(){
@@ -83,7 +86,7 @@ export default class LevelOne {
       levelObjects.push(Terrain.ground(
          1600,
          -100, 
-         300, 
+         this.width, 
          this.height + 100,
          this.width,
          false)
@@ -93,7 +96,9 @@ export default class LevelOne {
    move(direction){
       this.dx = direction;
    }
-
+   won(player){
+      return this.left >1400;
+   }
    stop(key){
       this.dx = 0
    }
@@ -103,7 +108,7 @@ export default class LevelOne {
          this.left += this.dx
          this.right += this.dx
       }
-
+      
       for(let i = 0; i < this.numTerrain; i++) {
          let ter = this.terrain[i];
          if( ter.start < right && ter.end > left ){
@@ -119,6 +124,32 @@ export default class LevelOne {
             ter.render = false;
          }
       }
-
+      if(this.left < 100 && !this.intSeen) {
+         ctx.fillStyle = "#F4A261";
+         ctx.textAlign = "center";
+         ctx.font = "20px Georgia";
+         ctx.fillText("Press A and W to move", this.width / 2, this.height / 2);
+         ctx.fillText(
+         "Press W or space to jump",
+         this.width / 2,
+         this.height / 2 + 20
+         );
+         ctx.fillText(
+         "Press W or space twice to double jump",
+         this.width / 2,
+         this.height / 2 + 40
+         );
+      } else if(!this.intSeen) {
+         this.intSeen = true
+      }
    }  
+   drawText(ctx){
+      ctx.fillStyle = "#F4A261";
+      ctx.font = "30px Georgia";
+      ctx.fillText(
+         "Press any key to begin",
+         this.width / 2,
+         this.height / 2 + 80
+      );
+   }
 }

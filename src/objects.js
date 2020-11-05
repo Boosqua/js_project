@@ -1,23 +1,37 @@
 import Player from "./player"
 import LEVELS from "./levels/levels"
 import terrainUtils from "./terrain_utils"
-import TerrainUtil from "./terrain_utils";
+
 export default class Objects {
    constructor(dimensions, ctx) {
       this.ctx = ctx;
       this.dimensions = dimensions;
       this.floor = this.dimensions.height - 50;
+
       this.player = new Player(dimensions, this.floor, ctx);
       this.terrain = [];
       this.selectLevel = this.selectLevel.bind(this);
       this.move = this.move.bind(this);
       this.stop = this.stop.bind(this);
+      this.over = this.over.bind(this)
       this.walkingTerrain = false;
+      this.currentLevel = 1;
    }
-
-   selectLevel(n) {
-      this.level = LEVELS[n](this.dimensions);
+   over(){
+      if (this.player.y >= this.dimensions.height ){
+         this.currentLevel = 1;
+         return true
+      } else if(this.level.won()){
+         console.log('breh')
+         this.currentLevel++
+         this.selectLevel()
+         return false
+      }
+   }
+   selectLevel() {
+      this.level = LEVELS[this.currentLevel](this.dimensions);
       this.terrain = this.level.terrain
+      this.player.direction = true
       this.player.y = this.level.startPos[1]
       this.player.x = this.level.startPos[0]
    }
@@ -46,7 +60,7 @@ export default class Objects {
       let pRight = player.x + player.width;
       let pLeft = player.x
       let adjX = level.left;
-      let feet = player.y + player.height;
+      let feet = player.y + player.height - 4;
       let head = player.y
       let blocked = false
       terrain.forEach( (terr) => {
@@ -78,7 +92,7 @@ export default class Objects {
       let pRight = player.x + player.width;
       let pLeft = player.x
       let adjX = level.left;
-      let feet = player.y + player.height;
+      let feet = player.y + player.height - 4;
       let head = player.y
       let blocked = false
       terrain.forEach( (terr) => {
@@ -94,7 +108,7 @@ export default class Objects {
             feet > top &&
             head < bot){
             blocked = true
-            player.x = xE 
+            player.x = xE + 4
 
          }
       })
@@ -157,5 +171,8 @@ export default class Objects {
          this.checkClear();
       }
       this.player.draw(ctx);
+      if(this.player.lock){
+         this.level.drawText(ctx)
+      }
    }
 }

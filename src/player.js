@@ -28,6 +28,7 @@ export default class Player {
       this.blockR = false;
       this.blockL = false;
       this.blockClear = 0
+      this.lock = true
       // store lives?
    }
 
@@ -35,6 +36,9 @@ export default class Player {
       this.character.draw(this.x, this.y, this.direction, this.dx === 0)
       if(this.dx === 0){
          this.character.animationFrame = 0
+      }
+      if( this.lock ){
+         return
       }
       if ( this.dx != 0 && !this.checkScroll() && this.checkBlock() ){
          this.x += this.dx;
@@ -77,13 +81,15 @@ export default class Player {
    }
    move(e){
       let key = e.key;
-
+      if (this.lock){
+         this.lock = false
+      }
       if( key === 'a' || key === 'd' ){
 
             this.dx = MOVEMENTS[key]
 
          this.direction = key === 'd' ? true : false
-      } else if( e.key === 'w' && this.jump < 2 ){
+      } else if( (e.which === 32 || e.key === 'w') && this.jump < 2 ){
          this.dy = this.dy > 0 ? -8 : this.dy - 8
          this.jump += 1
          this.fall = true
@@ -104,6 +110,7 @@ export default class Player {
       
       }
    }
+
 }
 
 /* Notes
