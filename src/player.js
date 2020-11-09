@@ -3,7 +3,7 @@ const MOVEMENTS = {
    a: -4.5,
    d: 4.5,
 }
-const GRAVITY = .5
+const GRAVITY = .4
 const TERMINAL = 10
 export default class Player {
    constructor(dimensions, floor, ctx){
@@ -97,6 +97,8 @@ export default class Player {
       } else if( key === 's' && this.platform){
          this.y += 5;
          this.fall = true
+      } else if(key === 'm'){
+         this.character.mapa = !this.character.mapa
       }
    }
    

@@ -20,7 +20,7 @@ export default class LevelTwo extends LevelUtils {
             0, 
             450, 
             this.width, 
-            20,
+            15,
             this.width,
             true
          )
@@ -30,7 +30,7 @@ export default class LevelTwo extends LevelUtils {
             0, 
             325, 
             this.width, 
-            20,
+            15,
             this.width,
             true
          )
@@ -40,7 +40,7 @@ export default class LevelTwo extends LevelUtils {
             0, 
             200, 
             this.width, 
-            20,
+            15,
             this.width,
             true
          )
@@ -61,7 +61,8 @@ export default class LevelTwo extends LevelUtils {
    won(player){
       let delta = Date.now() -  this.startTime;
       if( delta > 10000){
-         console.log("haha!")
+         player.edgeRight = 500;
+         return true
       }
    }
    formBullets(){
@@ -130,7 +131,8 @@ export default class LevelTwo extends LevelUtils {
                ctx.beginPath();
                
                ctx.fillStyle = "black";
-               ctx.fillRect(dims[0], dims[1], dims[2], dims[3])
+               // ctx.fillRect(dims[0], dims[1], dims[2], dims[3])
+               TerrainUtil.drawPlatform(ctx, ...dims);
             }
          } else {
             ter.render = false;

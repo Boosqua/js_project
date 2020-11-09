@@ -121,7 +121,8 @@ export default class LevelOne {
                TerrainUtil.drawGround(ctx, ...dims)
             } else {
                ctx.fillStyle = "#E76F51";
-               ctx.fillRect(dims[0], dims[1], dims[2], dims[3])
+               // ctx.fillRect(dims[0], dims[1], dims[2], dims[3])
+               TerrainUtil.drawPlatform(ctx)
             }
          } else {
             ter.render = false;

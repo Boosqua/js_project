@@ -2,6 +2,7 @@ const IMAGESCROLL = 32;
 
 import characterSheet from './images/characters.png';
 import charactersReverse from './images/characters_reverse.png'
+import mapa from './images/mapa.png'
 
 export default class Sprite {
    constructor(ctx, width, height) {
@@ -12,6 +13,10 @@ export default class Sprite {
       this.imgY = 40
       this.imgR = new Image();
       this.imgR.src = charactersReverse
+      this.mapa = false;
+      this.imgMapa = new Image();
+      this.imgMapa.src = mapa
+
    }
 
    draw(x, y, direction, idle, width, height){
@@ -19,6 +24,9 @@ export default class Sprite {
       this.ctx.webkitImageSmoothingEnabled = false;
       this.ctx.msImageSmoothingEnabled = false;
       this.ctx.imageSmoothingEnabled = false;
+      if(this.mapa){
+         return this.drawMapa(x, y);
+      }
       let img;
       let imgY
       if( direction ){
@@ -46,6 +54,21 @@ export default class Sprite {
          24,
          x,
          y,30, 40
+      )
+   }
+
+   drawMapa(x, y){
+      this.ctx.drawImage(
+         this.imgMapa,
+         0,
+         0,
+         100,
+         127,
+         x,
+         y,
+         30,
+         40
+
       )
    }
 }

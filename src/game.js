@@ -42,7 +42,17 @@ export default class TempGameName {
       this.ctx.fillStyle = "#264653";
       this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
       if(this.gameRunning){
-         this.ctx.drawImage(this.img, 0, 0, 110, 110, 75, 0, this.dimensions.height, this.dimensions.height)
+         this.ctx.drawImage(
+            this.img, 
+            0, 
+            0, 
+            110, 
+            110, 
+            75, 
+            0, 
+            this.dimensions.height, 
+            this.dimensions.height
+         )
          this.game.draw(this.ctx)
       } else if(this.gameOver) {
          this.endGame();
@@ -90,7 +100,7 @@ export default class TempGameName {
       let yEnd = this.dimensions.height;
       let x1 = 0;
       let y1 = 0;
-      this.ctx.strokeStyle = "rgb(0, 0, 0, .5";
+      this.ctx.strokeStyle = "rgb(0, 0, 0, .5)";
       while( y1 < yEnd ){
          this.ctx.beginPath();
          this.ctx.lineTo(x1, y1);

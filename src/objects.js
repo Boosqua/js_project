@@ -21,6 +21,7 @@ export default class Objects {
    }
    over(){
       if (this.player.y >= this.dimensions.height || Bullet.checkHit(this.bullets, [this.player])){
+         this.player.edgeRight = 500;
          this.currentLevel = 1;
          return true
       } else if(this.level.won(this.player)){

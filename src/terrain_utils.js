@@ -93,4 +93,17 @@ export default class TerrainUtil {
       gndY += GROUNDSIDES.height * 2
       }
    }
+
+   static drawPlatform(ctx, x, y, platW, platH){
+      let platform = new Image();
+      platform.src = terrain;
+      let parts = Math.floor( platW / 50 )
+      for( let i = 0; i < parts; i++ ){
+         ctx.drawImage(platform, 155, 0, 25, 5, x, y, 50, 15);
+         x += 50
+      }
+
+      let endLength = platW - ( parts * 50 );
+      ctx.drawImage(platform, 155, 0, endLength / 2, 5,x, y, endLength, 15)
+   }
 }
