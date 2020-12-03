@@ -5,7 +5,7 @@
 ## Stack
   HTML5, JS, CSS Node Version: 10.13.0
 ## Features
-* Prompts before each level explaining the controlls to the player
+* Prompts before each level explaining the controls to the player
 * Physics effects such as collision and gravity
 * Animated sprite movement
 * Deadly projectiles 
