@@ -1,4 +1,4 @@
-# js_project
+# The Royal Gunt
 
 ## What is The Royal Gunt?
   The Royal Gunt is a two dimensional side scroller platforming game where players must traverse terrain and avoid projectiles to reach the end of each level!
